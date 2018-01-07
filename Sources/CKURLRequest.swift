@@ -194,13 +194,19 @@ extension CKURLRequest: URLSessionDataDelegate {
             metrics?.bytesDownloaded = UInt(data.count)
             metricsDelegate?.requestDidFinish(withMetrics: operationMetrics)
         }
+        //print("data received is \(data.count) bytes:\n\(data)")
+    }
+    
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, willCacheResponse proposedResponse: CachedURLResponse, completionHandler: @escaping (CachedURLResponse?) -> Void) {
+        
+        let data = proposedResponse.data
+        //print("finished data total: \(data.count)")
         
         // Parse JSON
         do {
             let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-            
             CloudKit.debugPrint(jsonObject)
-
+            
             // Call completion block
             if let _ = CKErrorDictionary(dictionary: jsonObject) {
                 completionBlock?(.error(CKError.server(jsonObject)))
@@ -208,8 +214,9 @@ extension CKURLRequest: URLSessionDataDelegate {
                 let result = CKURLRequestResult.success(jsonObject)
                 completionBlock?(result)
             }
-        
+            
         } catch let error as NSError {
+            print("error on parse: \(error.localizedDescription)")
             completionBlock?(.error(.parse(error)))
         }
     }
