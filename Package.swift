@@ -4,9 +4,9 @@ import PackageDescription
 let package = Package(
     name: "OpenCloudKit",
     dependencies: [
-        .Package(url: "https://github.com/vapor-community/clibressl.git", .branch("master")),
-        .Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", majorVersion: 0),
-        .Package(url:  "https://github.com/DanToml/Jay.git", majorVersion: 1)
+        .package(url: "https://github.com/vapor-community/clibressl.git", .branch("master")),
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "0.12.0")),
+        .package(url:  "https://github.com/rhunt222/Jay.git", .branch("master"))
         ]
 )
 
